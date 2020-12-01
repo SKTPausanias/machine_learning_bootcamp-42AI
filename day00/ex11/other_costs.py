@@ -15,6 +15,9 @@ def mse_(y, y_hat):
 	Raises:
 	This function should not raise any Exceptions.
 	"""
+	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+		return None
+	return np.sum((y_hat - y) **2) / float(y.shape[0])
 
 def rmse_(y, y_hat):
 	"""
