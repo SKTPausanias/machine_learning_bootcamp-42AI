@@ -32,6 +32,10 @@ def rmse_(y, y_hat):
 	Raises:
 	This function should not raise any Exceptions.
 	"""
+	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+		return None
+	return sqrt(np.sum((y_hat - y) **2) / float(y.shape[0]))
+
 def mae_(y, y_hat):
 	"""
 	Description:
@@ -45,6 +49,9 @@ def mae_(y, y_hat):
 	Raises:
 	This function should not raise any Exceptions.
 	"""
+	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+		return None
+	return np.sum(np.absolute(y_hat - y)) / float(y.shape[0])
 
 def r2score_(y, y_hat):
 	"""
@@ -59,6 +66,9 @@ def r2score_(y, y_hat):
 	Raises:
 	This function should not raise any Exceptions.
 	"""
+	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+		return None
+	return 1 - ((np.sum((y_hat - y) **2)) / (np.sum((y_hat - np.mean(y)) **2)))
 	
 if __name__ == "__main__":
 	x = np.array([0, 15, -9, 7, 12, 3, -21])
