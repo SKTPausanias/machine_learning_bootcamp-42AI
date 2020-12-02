@@ -14,7 +14,7 @@ def simple_gradient(x, y, theta):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape != (2,):
+	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape != (2,) or x is None or y is None:
 		return None
 	gr_vec = np.zeros((2,))
 	y_hat = predict_(x, theta)
