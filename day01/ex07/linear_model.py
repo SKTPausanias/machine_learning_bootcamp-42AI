@@ -16,6 +16,9 @@ if __name__ == "__main__":
 	plt.plot(Xpill, Yscore, '.', color='b')
 	plt.plot(Xpill, Y_model1, 'x', color='lime')
 	plt.plot(Xpill, Y_model1, 'r--', color='lime')
+	plt.xlabel('Quantity of blue pill (in micrograms)')
+	plt.ylabel('Space driving score')
+	plt.title	
 	plt.grid()
 	plt.show()
 	print(linear_model1.mse_(Xpill, Yscore))
