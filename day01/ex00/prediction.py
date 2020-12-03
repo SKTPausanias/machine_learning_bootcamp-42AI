@@ -13,16 +13,14 @@ def predict_(x, theta) -> np.ndarray:
 	Raises:
 	This function should not raise any Exceptions.
 	"""
-	theta = np.reshape(theta, (theta.shape[0],))
-	if len(x) < 1 and theta.shape == (theta.shape[0],):
+	if len(x) < 1 or theta.shape[0] < 1:
 		return None
-	return np.sum(add_intercept(x) * theta, axis=1)
+	return np.matmul(add_intercept(x), theta)
 
 if __name__ == "__main__":
 	x = np.arange(1,6)
 	theta1 = np.array([5, 0])
-	print(theta1.shape)
-	print(predict_(x, theta1))
+	print(predict_(x, theta1).shape)
 	theta2 = np.array([0, 1])
 	print(predict_(x, theta2))
 	theta3 = np.array([5, 3])

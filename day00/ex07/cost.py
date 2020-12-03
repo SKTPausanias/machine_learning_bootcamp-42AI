@@ -19,12 +19,11 @@ def cost_elem_(y, y_hat):
 			y_hat = y_hat[:, np.newaxis]
 		if y.shape == (y.shape[0],):
 			y = y[:, np.newaxis]
-		J_elem = np.zeros(y_hat.shape)
-		for i in range(y.shape[0]):
-			J_elem[i][0] = np.power(y_hat[i][0] - y[i][0], 2) / (2 * y.shape[0])
-		return J_elem
+		J_elem = np.sum(np.power(y_hat - y, 2), axis=1) / (2 * y.shape[0])
 	except ValueError:
 		return None
+	else:
+		return J_elem
 
 def cost_(y, y_hat):
 	"""

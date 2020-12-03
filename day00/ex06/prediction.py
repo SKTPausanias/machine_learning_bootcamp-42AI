@@ -13,7 +13,7 @@ def predict_(x, theta):
 	Raises:
 	This function should not raise any Exceptions.
 	"""
-	if len(x) < 1 or x.shape != (x.shape[0],) or theta.shape != (2,):
+	if len(x) < 1 or theta.shape[0] < 1:
 		return None
 	return np.matmul(add_intercept(x), theta)
 
