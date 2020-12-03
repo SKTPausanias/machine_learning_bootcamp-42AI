@@ -1,11 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class MyLinearRegression():
 	"""
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=5e-8, max_iter=1500000):
+	def __init__(self,  thetas, alpha=5e-8, max_iter=1500):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -50,6 +51,7 @@ class MyLinearRegression():
 			return None
 		for _ in range(self.max_iter):
 			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
+			#plt.plot(self.cost_(x, y), self.thetas)
 		return self.thetas
 	
 	def predict_(self, x):
