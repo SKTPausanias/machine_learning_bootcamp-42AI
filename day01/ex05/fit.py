@@ -19,7 +19,7 @@ def fit_(x, y, theta, alpha, max_iter):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape != (2,) or x is None or y is None:
+	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape[0] < 1 or x is None or y is None:
 		return None
 	for _ in range(max_iter):
 		theta -= (gradient(x, y, theta) * alpha)

@@ -13,10 +13,8 @@ def predict_(x, theta) -> np.ndarray:
 	Raises:
 	This function should not raise any Exceptions.
 	"""
-	#theta = np.reshape(theta, (theta.shape[0],))
-	if len(x) < 1 and theta.shape == (theta.shape[0],):
+	if len(x) < 1 or theta.shape[0] < 1:
 		return None
-	#return np.sum(add_intercept(x) * theta, axis=1)
 	return np.matmul(add_intercept(x), theta)
 
 if __name__ == "__main__":

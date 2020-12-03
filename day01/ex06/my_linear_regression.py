@@ -64,7 +64,7 @@ class MyLinearRegression():
 		Raises:
 		This function should not raise any Exceptions.
 		"""
-		if len(x) < 1 and self.thetas.shape == (self.thetas.shape[0],):
+		if len(x) < 1 or len(self.thetas) < 1:
 			return None
 		return np.matmul(self.add_intercept(x), self.thetas)
 

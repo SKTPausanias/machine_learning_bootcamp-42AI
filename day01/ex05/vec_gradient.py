@@ -16,7 +16,7 @@ def gradient(x, y, theta):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape != (2,) or x is None or y is None:
+	if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or theta.shape[0] < 1 or x is None or y is None:
 		return None
 	y_hat = predict_(x, theta)
 	gr_vec = (np.matmul(np.transpose(add_intercept(x)), (y_hat - y))) / y.shape[0]
