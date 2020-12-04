@@ -1,4 +1,6 @@
 import numpy as np
+from prediction import predict_
+from sklearn.metrics import mean_squared_error
 
 def cost_(y, y_hat):
 	"""Computes the mean squared error of two non-empty numpy.ndarray, without any for loop. The
@@ -12,7 +14,7 @@ def cost_(y, y_hat):
 	"""
 	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
 		return None
-	return np.sum((y_hat - y) **2) / float(y.shape[0])
+	return np.sum((y_hat - y) **2) / float(y.shape[0] * 2) 
 
 if __name__ == "__main__":
 	X = np.array([0, 15, -9, 7, 12, 3, -21])
