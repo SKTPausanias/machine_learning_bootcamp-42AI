@@ -1,12 +1,11 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 class MyLinearRegression():
 	"""
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=5e-8, max_iter=1500):
+	def __init__(self,  thetas, alpha=5e-8, max_iter=1500000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -51,7 +50,6 @@ class MyLinearRegression():
 			return None
 		for _ in range(self.max_iter):
 			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
-			#plt.plot(self.cost_(x, y), self.thetas)
 		return self.thetas
 	
 	def predict_(self, x):
@@ -66,7 +64,7 @@ class MyLinearRegression():
 		Raises:
 		This function should not raise any Exceptions.
 		"""
-		if len(x) < 1 and self.thetas.shape == (self.thetas.shape[0],):
+		if len(x) < 1 or len(self.thetas) < 1:
 			return None
 		return np.matmul(self.add_intercept(x), self.thetas)
 
@@ -86,10 +84,10 @@ class MyLinearRegression():
 		return np.c_[np.ones(x.shape[0]), x]
 
 
-	def cost_elem_(self, x, y):
+	def cost_elem_(self, y_hat, y):
 		"""
 		Description:
-		Calculates all the elements (1/2*M)*(y_pred - y)^2 of the cost function.
+		Calculates all the elements (1/M)*(y_pred - y)^2 of the cost function.
 		Args:
 		y: has to be an numpy.ndarray, a vector.
 		y_hat: has to be an numpy.ndarray, a vector.
@@ -99,20 +97,9 @@ class MyLinearRegression():
 		Raises:
 		This function should not raise any Exception.
 		"""
-		try:
-			y_hat = self.predict_(x)
-			if y_hat.shape == (y_hat.shape[0],):
-				y_hat = y_hat[:, np.newaxis]
-			if y.shape == (y.shape[0],):
-				y = y[:, np.newaxis]
-			J_elem = np.zeros(y_hat.shape)
-			for i in range(y.shape[0]):
-				J_elem[i][0] = np.power(y_hat[i][0] - y[i][0], 2) / (2 * y.shape[0])
-			return J_elem
-		except ValueError:
-			return None
+		return (np.power(y_hat - y, 2)) / (2 * y.shape[0])
 
-	def cost_(self, x, y):
+	def cost_(self, y_hat, y):
 		"""Computes the mean squared error of two non-empty numpy.ndarray, without any for loop. The
 		􏰀→ two arrays must have the same dimensions. Args:
 		y: has to be an numpy.ndarray, a vector. y_hat: has to be an numpy.ndarray, a vector. Returns:
@@ -122,10 +109,8 @@ class MyLinearRegression():
 		Raises:
 		This function should not raise any Exceptions.
 		"""
-		y_hat = self.predict_(x)
-		if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
-			return None
-		return np.sum((y_hat - y) **2) / float(y.shape[0] * 2)
+		j_elem = self.cost_elem_(y_hat, y)
+		return None if j_elem is None else np.sum(j_elem, dtype=float, axis=0)
 	
 	def mse_(self, x, y):
 		"""
@@ -152,6 +137,7 @@ if __name__ == "__main__":
 	lr1 = MyLinearRegression([2, 0.7])
 
 	print(lr1.predict_(x))
+	print(lr1.mse_(x, y))
 	print(lr1.cost_elem_(lr1.predict_(x), y))
 	print(lr1.cost_(lr1.predict_(x), y))
 
