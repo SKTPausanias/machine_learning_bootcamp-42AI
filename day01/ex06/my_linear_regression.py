@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=5e-8, max_iter=15000):
+	def __init__(self,  thetas, alpha=5e-8, max_iter=1500000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -26,12 +26,10 @@ class MyLinearRegression():
 		Raises:
 		This function should not raise any Exception.
 		"""
-		if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or x is None or y is None:
+		if len(x) < 1 or len(y) < 1 or len(theta) < 1 or x.shape != y.shape or len(self.thetas) < 1 or x is None or y is None:
 			return None
-		gr_vec = np.zeros((2,))
 		y_hat = self.predict_(x)
-		gr_vec[0] = self.alpha * 1 / float(y.shape[0]) * np.sum((y_hat - y))
-		gr_vec[1] = self.alpha * 1 / float(y.shape[0]) * np.sum((y_hat - y) * x)
+		gr_vec = (np.matmul(np.transpose(self.add_intercept(x)), (y_hat - y))) / y.shape[0]
 		return gr_vec
 
 	def fit_(self, x, y):
@@ -55,7 +53,7 @@ class MyLinearRegression():
 		#x_norm = (x - x.mean()) / x.std()
 		#y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x, y, self.thetas))
+			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
 		return self.thetas
 	
 	def predict_(self, x):
@@ -132,15 +130,48 @@ class MyLinearRegression():
 		This function should not raise any Exceptions.
 		"""
 		y_hat = self.predict_(x)
-		if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+		if len(y) < 1 or len(y_hat) < 1: #or y.shape != y_hat.shape:
 			return None
 		return np.sum((y_hat - y) **2) / float(y.shape[0])
+	
+	def r2score_(self, y, y_hat):
+		"""
+		Description:
+		Calculate the R2score between the predicted output and the output.
+		Args:
+		y: has to be a numpy.ndarray, a vector of dimension m * 1.
+		y_hat: has to be a numpy.ndarray, a vector of dimension m * 1.
+		Returns:
+		r2score: has to be a float.
+		None if there is a matching dimension problem.
+		Raises:
+		This function should not raise any Exceptions.
+		"""
+		if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
+			return None
+		return 1.0 - (np.sum((y_hat - y) **2.0) / np.sum((y_hat - np.mean(y)) **2.0))
 
 
 if __name__ == "__main__":
-	x = np.array([[12.4956442], [21.5007972], [31.5527382], [48.9145838], [57.5088733]])
-	y = np.array([[37.4013816], [36.1473236], [45.7655287], [46.6793434], [59.5585554]])
-	lr1 = MyLinearRegression([2, 0.7])
+	x = np.array([12.4956442, 21.5007972, 31.5527382, 48.9145838, 57.5088733])
+	y = np.array([37.4013816, 36.1473236, 45.7655287, 46.6793434, 59.5585554])
+	#m_x = x.mean()
+	#m_y = y.mean()
+	#r = m_y % m_x
+	#f = m_y / m_x
+	#print(r)
+	#print(f)
+	#sum_x = np.sum(x)
+	#sum_y = np.sum(y)
+	#print(sum_x)
+	#print(sum_y)
+	#theta1 = 1
+	#theta0 = (sum_y - sum_x) / x.shape[0]
+	#print(theta0)
+	#theta1 = (y[0] - y[1]) / (x[0] - x[1])
+	#theta0 = y[1] - (x[1] * theta1)
+	lr1 = MyLinearRegression([10.71, 1.31])
+
 
 	print(lr1.predict_(x))
 	print(lr1.mse_(x, y))
@@ -152,19 +183,9 @@ if __name__ == "__main__":
 	plt.show()
 	#lr1.fit_(x, y)
 	
-	reg = LinearRegression().fit(x, y)
-	print(reg.coef_)
-	#print(reg.score(x, y))
-	#print(reg.predict(x))
+	#print(lr1.r2score_(lr1.predict_(x), y))
 	#print(lr1.thetas)
 	#print(lr1.cost_(lr1.predict_(x), y))
-	plt.plot(y, x, '--', color='green')
-	plt.plot(reg.predict(x), x, 'b', color='olive')
-	plt.show()
-	#lr2 = MyLinearRegression([1.0, 1.0])
-	#lr2.fit_(x, y)
-	#print(lr2.thetas)
-
-	#print(lr2.predict_(x))
-	#print(lr2.cost_elem_(lr2.predict_(x), y))
-	#print(lr2.cost_(lr2.predict_(x), y))
+	#plt.plot(y, x, '--', color='green')
+	#plt.plot(lr1.predict_(x), x, 'b', color='olive')
+	#plt.show()
