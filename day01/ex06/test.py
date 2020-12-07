@@ -50,10 +50,10 @@ def r2score_(y, y_hat):
 if __name__ == "__main__":
 	x = np.array([[12.4956442], [21.5007972], [31.5527382], [48.9145838], [57.5088733]])
 	y = np.array([[37.4013816], [36.1473236], [45.7655287], [46.6793434], [59.5585554]])
-	m_x = x.mean()
-	m_y = y.mean()
-	r = m_y % m_x
-	f = m_y / m_x
+	#m_x = x.mean()
+	#m_y = y.mean()
+	#r = m_y % m_x
+	#f = m_y / m_x
 	
 	#print(r)
 	#print(f)
@@ -68,14 +68,20 @@ if __name__ == "__main__":
 	#plt.plot(lr1.predict_(x), x, 'b', color='olive')
 	#plt.show()
 	#lr1.fit_(x, y)
+	inter = ((sum(y) * (sum(x ** 2))) - (sum(x) * (sum(x * y)))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	slope = ((x.shape[0] * sum(x * y)) - (sum(x) * sum(y))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	print(inter)
+	print(slope)
+
 	
-	reg = LinearRegression().fit(x, y)
+	#reg = LinearRegression().fit(x, y)
 	#print(reg.score(x, y))
 	#print(reg.coef_)
-	print(reg.predict(x) / x)
-	print(reg.predict(x))
-	print(r2score_(reg.predict(x), y))
-	print(cost_(reg.predict(x), y))
-	plt.plot(y, x, '--', color='green')
-	plt.plot(reg.predict(x), x, 'b', color='olive')
-	plt.show()
+	#print(reg.intercept_)
+	#print(reg.predict(x) / x)
+	#print(reg.predict(x))
+	#print(r2score_(reg.predict(x), y))
+	#print(cost_(reg.predict(x), y))
+	#plt.plot(y, x, '--', color='green')
+	#plt.plot(reg.predict(x), x, 'b', color='olive')
+	#plt.show()

@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=5e-8, max_iter=150000):
+	def __init__(self,  thetas, alpha=0.001, max_iter=1500):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -170,9 +170,14 @@ if __name__ == "__main__":
 	#print(theta0)
 	#theta1 = (y[0] - y[1]) / (x[0] - x[1])
 	#theta0 = y[1] - (x[1] * theta1)
-	lr1 = MyLinearRegression([10.71, 1.31])
+	inter = ((sum(y) * (sum(x ** 2))) - (sum(x) * (sum(x * y)))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	slope = ((x.shape[0] * sum(x * y)) - (sum(x) * sum(y))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	print(inter)
+	print(slope)
 
+	lr1 = MyLinearRegression([inter, slope])
 
+	print(lr1.thetas)
 	print(lr1.predict_(x))
 	print(lr1.mse_(x, y))
 	print(lr1.cost_elem_(lr1.predict_(x), y))
@@ -183,9 +188,9 @@ if __name__ == "__main__":
 	plt.show()
 	lr1.fit_(x, y)
 	
-	print(lr1.r2score_(lr1.predict_(x), y))
-	#print(lr1.thetas)
+	#print(lr1.r2score_(lr1.predict_(x), y))
+	print(lr1.thetas)
 	print(lr1.cost_(lr1.predict_(x), y))
-	#plt.plot(y, x, '--', color='green')
-	#plt.plot(lr1.predict_(x), x, 'b', color='olive')
-	#plt.show()
+	plt.plot(y, x, '--', color='green')
+	plt.plot(lr1.predict_(x), x, 'b', color='olive')
+	plt.show()
