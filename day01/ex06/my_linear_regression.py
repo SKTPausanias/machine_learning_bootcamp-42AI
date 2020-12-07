@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=5e-8, max_iter=1500000):
+	def __init__(self,  thetas, alpha=5e-8, max_iter=150000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -181,11 +181,11 @@ if __name__ == "__main__":
 	plt.plot(y, x, '--', color='green')
 	plt.plot(lr1.predict_(x), x, 'b', color='olive')
 	plt.show()
-	#lr1.fit_(x, y)
+	lr1.fit_(x, y)
 	
-	#print(lr1.r2score_(lr1.predict_(x), y))
+	print(lr1.r2score_(lr1.predict_(x), y))
 	#print(lr1.thetas)
-	#print(lr1.cost_(lr1.predict_(x), y))
+	print(lr1.cost_(lr1.predict_(x), y))
 	#plt.plot(y, x, '--', color='green')
 	#plt.plot(lr1.predict_(x), x, 'b', color='olive')
 	#plt.show()
