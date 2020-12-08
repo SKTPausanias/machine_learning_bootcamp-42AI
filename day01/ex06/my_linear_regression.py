@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=0.001, max_iter=1500):
+	def __init__(self,  thetas, alpha=0.1, max_iter=15000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -50,10 +50,12 @@ class MyLinearRegression():
 		"""
 		if len(x) < 1 or len(y) < 1 or len(self.thetas) < 1 or x.shape != y.shape or x is None or y is None:
 			return None
-		#x_norm = (x - x.mean()) / x.std()
-		#y_norm = (y - y.mean()) / y.std()
+		x_norm = (x - x.mean()) / x.std()
+		y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
+			self.thetas -= (self.gradient(x_norm, y_norm, self.thetas) * self.alpha)
+		self.thetas[0] = y.mean() + ((self.thetas[0] - (self.thetas[1] * x.mean() / x.std())) * y.std())
+		self.thetas[1] = (self.thetas[1] * y.std() / x.std())
 		return self.thetas
 	
 	def predict_(self, x):
@@ -155,27 +157,13 @@ class MyLinearRegression():
 if __name__ == "__main__":
 	x = np.array([12.4956442, 21.5007972, 31.5527382, 48.9145838, 57.5088733])
 	y = np.array([37.4013816, 36.1473236, 45.7655287, 46.6793434, 59.5585554])
-	#m_x = x.mean()
-	#m_y = y.mean()
-	#r = m_y % m_x
-	#f = m_y / m_x
-	#print(r)
-	#print(f)
-	#sum_x = np.sum(x)
-	#sum_y = np.sum(y)
-	#print(sum_x)
-	#print(sum_y)
-	#theta1 = 1
-	#theta0 = (sum_y - sum_x) / x.shape[0]
-	#print(theta0)
-	#theta1 = (y[0] - y[1]) / (x[0] - x[1])
-	#theta0 = y[1] - (x[1] * theta1)
-	inter = ((sum(y) * (sum(x ** 2))) - (sum(x) * (sum(x * y)))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
-	slope = ((x.shape[0] * sum(x * y)) - (sum(x) * sum(y))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
-	print(inter)
-	print(slope)
 
-	lr1 = MyLinearRegression([inter, slope])
+	#inter = ((sum(y) * (sum(x ** 2))) - (sum(x) * (sum(x * y)))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	#slope = ((x.shape[0] * sum(x * y)) - (sum(x) * sum(y))) / ((x.shape[0] * sum(x ** 2)) - (sum(x) ** 2))
+	#print(inter)
+	#print(slope)
+
+	lr1 = MyLinearRegression([1, 1])
 
 	print(lr1.thetas)
 	print(lr1.predict_(x))
@@ -188,7 +176,6 @@ if __name__ == "__main__":
 	plt.show()
 	lr1.fit_(x, y)
 	
-	#print(lr1.r2score_(lr1.predict_(x), y))
 	print(lr1.thetas)
 	print(lr1.cost_(lr1.predict_(x), y))
 	plt.plot(y, x, '--', color='green')
