@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=0.0001, max_iter=50000):
+	def __init__(self,  thetas, alpha=1e-5, max_iter=600000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -50,20 +50,20 @@ class MyLinearRegression():
 		"""
 		if len(x) < 1 or len(y) < 1 or len(self.thetas) < 1 or x.shape[0] != y.shape[0] or x is None or y is None:
 			return None
-		x_norm = (x - x.mean()) / x.std()
-		y_norm = (y - y.mean()) / y.std()
+		#x_norm = (x - x.mean()) / x.std()
+		#y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x_norm, y_norm, self.thetas) * self.alpha)
-		res = self.thetas[0]
-		i = 1
-		while i < len(self.thetas):
-			res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
-			i += 1
-		self.thetas[0] = (res * y.std()) + y.mean()
-		i = 1
-		while i < len(self.thetas):
-			self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
-			i += 1
+			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
+		#res = self.thetas[0]
+		#i = 1
+		#while i < len(self.thetas):
+		#	res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
+		#	i += 1
+		#self.thetas[0] = (res * y.std()) + y.mean()
+		#i = 1
+		#while i < len(self.thetas):
+		#	self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
+		#	i += 1
 		return self.thetas
 	
 	def predict_(self, x):
@@ -168,34 +168,68 @@ if __name__ == "__main__":
 	terameters = np.array(data['Terameters']).reshape(-1,1)
 	Sprice = np.array(data['Sell_price']).reshape(-1,1)
 	
-	myLR_age = MyLinearRegression([[1], [-1.0]])
+	myLR_age = MyLinearRegression([[1], [1]], 0.0001, 500000)
 	myLR_age.fit_(age, Sprice)
 	print(myLR_age.mse_(age, Sprice))
 	plt.plot(age, Sprice, '.', markersize=10, color='darkblue', label="Sell price")
 	plt.plot(age, myLR_age.predict_(age), '.', color='dodgerblue', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x1 : age (in years)')
 	plt.legend()
 	plt.grid()
 	plt.show()
-
-	myLR_thrust = MyLinearRegression([[1], [-1.0]])
+	
+	myLR_thrust = MyLinearRegression([[1], [1]], 0.0001, 500000)
 	myLR_thrust.fit_(thrust_power, Sprice)
 	print(myLR_thrust.mse_(thrust_power, Sprice))
 	plt.plot(thrust_power, Sprice, '.', markersize=10, color='green', label="Sell price")
 	plt.plot(thrust_power, myLR_thrust.predict_(thrust_power), '.', color='lime', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x2 : thrust power (in 10Km/s)')
 	plt.legend()
 	plt.grid()
 	plt.show()
-
-	myLR_distance = MyLinearRegression([[1], [-1.0]])
+	
+	myLR_distance = MyLinearRegression([[1], [1]], 0.0001, 500000)
 	myLR_distance.fit_(terameters, Sprice)
-	print(myLR_thrust.mse_(thrust_power, Sprice))
+	print(myLR_distance.mse_(terameters, Sprice))
 	plt.plot(terameters, Sprice, '.', markersize=10, color='darkviolet', label="Sell price")
 	plt.plot(terameters, myLR_distance.predict_(terameters), '.', color='violet', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x3 : distance totalizer value of spacecraft (in Tmeters)')
 	plt.legend()
 	plt.grid()
 	plt.show()
 
-	#data = pd.read_csv("spacecraft_data.csv")
-	#X = np.array(data[['Age','Thrust_power','Terameters']])
-	#Y = np.array(data[['Sell_price']])
-	#my_lreg = MyLR([1.0, 1.0, 1.0, 1.0])
+	data = pd.read_csv("../resources/spacecraft_data.csv")
+	X = np.array(data[['Age','Thrust_power','Terameters']])
+	Y = np.array(data[['Sell_price']])
+	my_lreg = MyLinearRegression([[1.0], [1.0], [1.0], [1.0]])
+
+	my_lreg.fit_(X, Y)
+	print(my_lreg.thetas)
+	print(my_lreg.mse_(X, Y))
+
+	plt.plot(X[:,0], Y, '.', markersize=10, color='darkblue', label="Sell price")
+	plt.plot(X[:,0], my_lreg.predict_(X), '.', color='dodgerblue', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x1 : age (in years)')
+	plt.legend()
+	plt.grid()
+	plt.show()
+
+	plt.plot(X[:,1], Y, '.', markersize=10, color='green', label="Sell price")
+	plt.plot(X[:,1], my_lreg.predict_(X), '.', color='lime', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x2 : thrust power (in 10Km/s)')
+	plt.legend()
+	plt.grid()
+	plt.show()
+
+	plt.plot(X[:,2], Y, '.', markersize=10, color='darkviolet', label="Sell price")
+	plt.plot(X[:,2], my_lreg.predict_(X), '.', color='violet', label="Predicted sell price")
+	plt.ylabel('y : sell price (in keuros)')
+	plt.xlabel('x3 : distance totalizer value of spacecraft (in Tmeters)')
+	plt.legend()
+	plt.grid()
+	plt.show()
