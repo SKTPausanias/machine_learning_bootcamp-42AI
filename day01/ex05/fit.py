@@ -31,6 +31,6 @@ if __name__ == "__main__":
 	y = np.array([37.4013816, 36.1473236, 45.7655287, 46.6793434, 59.5585554])
 	theta= np.array([1.0, 1.0])
 
-	theta1 = fit_(x, y, theta, alpha=5e-8, max_iter = 15000)
+	theta1 = fit_(x, y, theta, alpha=5e-8, max_iter = 1500000)
 	print(theta1)
 	print(predict_(x, theta1))

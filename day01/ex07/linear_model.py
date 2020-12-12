@@ -55,7 +55,8 @@ if __name__ == "__main__":
 	plt.grid()
 	plt.show()
 
-	linear_model1.fit_(Xpill, Yscore)	
+	linear_model1.fit_(Xpill, Yscore)
+	Y_model1 = linear_model1.predict_(Xpill)	
 	plt.plot(Xpill, Yscore, '.', color='b')
 	plt.plot(Xpill, Y_model1, 'x', color='lime')
 	plt.plot(Xpill, Y_model1, 'r--', color='lime')
