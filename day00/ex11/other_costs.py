@@ -68,7 +68,7 @@ def r2score_(y, y_hat):
 	"""
 	if len(y) < 1 or len(y_hat) < 1 or y.shape != y_hat.shape:
 		return None
-	return 1.0 - (np.sum((y_hat - y) **2.0) / np.sum((y_hat - np.mean(y)) **2.0))
+	return 1.0 - (np.sum((y_hat - y) ** 2) / np.sum((y - np.mean(y)) ** 2))
 	
 if __name__ == "__main__":
 	x = np.array([0, 15, -9, 7, 12, 3, -21])
