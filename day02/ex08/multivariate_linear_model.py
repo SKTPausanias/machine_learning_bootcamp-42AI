@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=1e-5, max_iter=600000):
+	def __init__(self,  thetas, alpha=0.1, max_iter=1000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -50,20 +50,24 @@ class MyLinearRegression():
 		"""
 		if len(x) < 1 or len(y) < 1 or len(self.thetas) < 1 or x.shape[0] != y.shape[0] or x is None or y is None:
 			return None
-		#x_norm = (x - x.mean()) / x.std()
-		#y_norm = (y - y.mean()) / y.std()
+		x_norm = np.zeros(x.shape)
+		i = 0
+		while i < x.shape[1]:
+			x_norm[:,i] = (x[:,i] - x[:,i].mean()) / x[:,i].std()
+			i += 1
+		y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
-		#res = self.thetas[0]
-		#i = 1
-		#while i < len(self.thetas):
-		#	res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
-		#	i += 1
-		#self.thetas[0] = (res * y.std()) + y.mean()
-		#i = 1
-		#while i < len(self.thetas):
-		#	self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
-		#	i += 1
+			self.thetas -= (self.gradient(x_norm, y_norm, self.thetas) * self.alpha)
+		res = self.thetas[0]
+		i = 1
+		while i < len(self.thetas):
+			res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
+			i += 1
+		self.thetas[0] = (res * y.std()) + y.mean()
+		i = 1
+		while i < len(self.thetas):
+			self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
+			i += 1
 		return self.thetas
 	
 	def predict_(self, x):
@@ -168,7 +172,7 @@ if __name__ == "__main__":
 	terameters = np.array(data['Terameters']).reshape(-1,1)
 	Sprice = np.array(data['Sell_price']).reshape(-1,1)
 	
-	myLR_age = MyLinearRegression([[1], [1]], 0.0001, 500000)
+	myLR_age = MyLinearRegression([[1], [1]])
 	myLR_age.fit_(age, Sprice)
 	print(myLR_age.mse_(age, Sprice))
 	plt.plot(age, Sprice, '.', markersize=10, color='darkblue', label="Sell price")
@@ -179,7 +183,7 @@ if __name__ == "__main__":
 	plt.grid()
 	plt.show()
 	
-	myLR_thrust = MyLinearRegression([[1], [1]], 0.0001, 500000)
+	myLR_thrust = MyLinearRegression([[1], [1]])
 	myLR_thrust.fit_(thrust_power, Sprice)
 	print(myLR_thrust.mse_(thrust_power, Sprice))
 	plt.plot(thrust_power, Sprice, '.', markersize=10, color='green', label="Sell price")
@@ -190,7 +194,7 @@ if __name__ == "__main__":
 	plt.grid()
 	plt.show()
 	
-	myLR_distance = MyLinearRegression([[1], [1]], 0.0001, 500000)
+	myLR_distance = MyLinearRegression([[1], [1]])
 	myLR_distance.fit_(terameters, Sprice)
 	print(myLR_distance.mse_(terameters, Sprice))
 	plt.plot(terameters, Sprice, '.', markersize=10, color='darkviolet', label="Sell price")

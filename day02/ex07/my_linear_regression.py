@@ -50,15 +50,24 @@ class MyLinearRegression():
 		"""
 		if len(x) < 1 or len(y) < 1 or len(self.thetas) < 1 or x.shape[0] != y.shape[0] or x is None or y is None:
 			return None
-		#x_norm = (x - x.mean()) / x.std()
+		#x_norm = np.zeros(x.shape)
+		#i = 0
+		#while i < x.shape[1]:
+		#	x_norm[:,i] = (x[:,i] - x[:,i].mean()) / x[:,i].std()
+		#	i += 1
 		#y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
 			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
-		#self.thetas[0] = y.mean() + ((self.thetas[0] - (self.thetas[1] * x.mean() / x.std())) * y.std())
-		#self.thetas[1] = (self.thetas[1] * y.std() / x[:,0].std())
-		#self.thetas[2] = (self.thetas[2] * y.std() / x[:,1].std())
-		#self.thetas[3] = (self.thetas[3] * y.std() / x[:,2].std())
-		#self.thetas[4] = (self.thetas[4] * y.std() / x[:,3].std())
+		#res = self.thetas[0]
+		#i = 1
+		#while i < len(self.thetas):
+		#	res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
+		#	i += 1
+		#self.thetas[0] = (res * y.std()) + y.mean()
+		#i = 1
+		#while i < len(self.thetas):
+		#	self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
+		#	i += 1
 		return self.thetas
 	
 	def predict_(self, x):
@@ -170,3 +179,8 @@ if __name__ == "__main__":
 	print(mylr.predict_(X))
 	print(mylr.cost_elem_(mylr.predict_(X),Y))
 	print(mylr.cost_(mylr.predict_(X),Y))
+
+	plt.plot(X, Y, '.', color='darkblue')
+	plt.plot(X, mylr.predict_(X), color='dodgerblue')
+	plt.grid()
+	plt.show()
