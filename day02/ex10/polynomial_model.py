@@ -22,5 +22,6 @@ def add_polynomial_features(x, power):
 
 if __name__ == "__main__":
 	x = np.arange(1,6).reshape(-1, 1)
-	print(x)
 	print(add_polynomial_features(x, 3))
+	print(add_polynomial_features(x, 6))
+	

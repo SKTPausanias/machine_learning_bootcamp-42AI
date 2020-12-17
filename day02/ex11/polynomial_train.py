@@ -18,14 +18,23 @@ if __name__ == "__main__":
 	plt.scatter(x,y)
 	plt.show()
 
-	x_ = add_polynomial_features(x, 3)
-	my_lr = MyLinearRegression(np.ones(4).reshape(-1,1))
-	my_lr.fit_(x_, y)
-	continuous_x = np.arange(1,10.01, 0.01).reshape(-1,1)
-	print(continuous_x)
-	x_ = add_polynomial_features(continuous_x, 3)
-	y_hat = my_lr.predict_(x_)
-	
-	plt.scatter(x,y)
-	plt.plot(continuous_x, y_hat, color='orange')
+	i = 2
+	arr = np.zeros(9)
+	l = list(range(2, 11))
+	while i <= 10:
+		x_ = add_polynomial_features(x, i)
+		my_lr = MyLinearRegression(np.ones(i + 1).reshape(-1,1))
+		my_lr.fit_(x_, y)
+		arr[i - 2 ] = (my_lr.cost_(my_lr.predict_(x_), y))
+
+		continuous_x = np.arange(1,10.01, 0.01).reshape(-1,1)
+		x_ = add_polynomial_features(continuous_x, i)
+		y_hat = my_lr.predict_(x_)
+
+		plt.scatter(x,y)
+		plt.plot(continuous_x, y_hat, color='orange')
+		plt.show()
+		i += 1
+	plt.bar(l, arr, color='orange')
 	plt.show()
+	print(arr)

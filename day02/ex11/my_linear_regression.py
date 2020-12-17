@@ -7,7 +7,7 @@ class MyLinearRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=0.000001, max_iter=600000):
+	def __init__(self,  thetas, alpha=0.1, max_iter=12000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
@@ -50,20 +50,24 @@ class MyLinearRegression():
 		"""
 		if len(x) < 1 or len(y) < 1 or len(self.thetas) < 1 or x.shape[0] != y.shape[0] or x is None or y is None:
 			return None
-		#x_norm = (x - x.mean()) / x.std()
-		#y_norm = (y - y.mean()) / y.std()
+		x_norm = np.zeros(x.shape)
+		i = 0
+		while i < x.shape[1]:
+			x_norm[:,i] = (x[:,i] - x[:,i].mean()) / x[:,i].std()
+			i += 1
+		y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
-		#res = self.thetas[0]
-		#i = 1
-		#while i < len(self.thetas):
-		#	res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
-		#	i += 1
-		#self.thetas[0] = (res * y.std()) + y.mean()
-		#i = 1
-		#while i < len(self.thetas):
-		#	self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
-		#	i += 1
+			self.thetas -= (self.gradient(x_norm, y_norm, self.thetas) * self.alpha)
+		res = self.thetas[0]
+		i = 1
+		while i < len(self.thetas):
+			res -= (self.thetas[i] * x[:,i - 1].mean() / x[:,i - 1].std())
+			i += 1
+		self.thetas[0] = (res * y.std()) + y.mean()
+		i = 1
+		while i < len(self.thetas):
+			self.thetas[i] = (self.thetas[i] * y.std() / x[:,i - 1].std())
+			i += 1
 		return self.thetas
 	
 	def predict_(self, x):
