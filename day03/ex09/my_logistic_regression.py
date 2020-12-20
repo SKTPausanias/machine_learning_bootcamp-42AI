@@ -6,12 +6,12 @@ class MyLogisticRegression():
 	Description:
 	My personnal linear regression class to fit like a boss.
 	"""
-	def __init__(self,  thetas, alpha=0.001, max_iter=1000):
+	def __init__(self,  thetas, alpha=0.1, max_iter=1000):
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
 
-	def gradient(self, x, y, theta):
+	def gradient(self, x, y):
 		"""Computes a gradient vector from three non-empty numpy.ndarray, without any for loop. The
 		,→ three arrays must have compatible dimensions.
 		Args:
@@ -56,7 +56,7 @@ class MyLogisticRegression():
 		#	i += 1
 		#y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x, y, self.thetas) * self.alpha)
+			self.thetas -= (self.gradient(x, y) * self.alpha)
 		#res = self.thetas[0]
 		#i = 1
 		#while i < len(self.thetas):
@@ -115,7 +115,7 @@ class MyLogisticRegression():
 			return None
 		return np.c_[np.ones(x.shape[0]), x]
 
-	def cost_(self, y_hat, y, eps=1e-16):
+	def cost_(self, y_hat, y, eps=1e-15):
 		"""
 		Computes the logistic loss value.
 		Args:
@@ -128,7 +128,7 @@ class MyLogisticRegression():
 		Raises:
 		This function should not raise any Exception.
 		"""
-		return -(np.sum(((y + eps) * np.log(y_hat)) + ((1 - (y + eps)) * np.log(1 - y_hat)))) * (1 / y.shape[0])
+		return -(1 / y.shape[0]) * np.sum((y * np.log(y_hat + eps)) + (1 - y) * np.log(1 - y_hat + eps))
 
 if __name__ == "__main__":
 	X = np.array([[1., 1., 2., 3.], [5., 8., 13., 21.], [3., 5., 9., 14.]])
@@ -138,8 +138,8 @@ if __name__ == "__main__":
 	print(mylr.predict_(X))
 	print(mylr.cost_(mylr.predict_(X), Y))
 
-	#mylr.fit_(X, Y)
-	#print(mylr.thetas)
+	mylr.fit_(X, Y)
+	print(mylr.thetas)
 
-	#print(mylr.predict_(X))
-	#print(mylr.cost_(X,Y))
+	print(mylr.predict_(X))
+	print(mylr.cost_(mylr.predict_(X), Y))

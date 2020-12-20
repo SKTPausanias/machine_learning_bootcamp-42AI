@@ -11,7 +11,7 @@ class MyLinearRegression():
 		self.max_iter = max_iter
 		self.thetas = thetas
 
-	def gradient(self, x, y, theta):
+	def gradient(self, x, y):
 		"""Computes a gradient vector from three non-empty numpy.ndarray, without any for loop. The
 		,→ three arrays must have compatible dimensions.
 		Args:
@@ -56,7 +56,7 @@ class MyLinearRegression():
 			i += 1
 		y_norm = (y - y.mean()) / y.std()
 		for _ in range(self.max_iter):
-			self.thetas -= (self.gradient(x_norm, y_norm, self.thetas) * self.alpha)
+			self.thetas -= (self.gradient(x_norm, y_norm) * self.alpha)
 		res = self.thetas[0]
 		i = 1
 		while i < len(self.thetas):
