@@ -149,8 +149,6 @@ if __name__ == "__main__":
 	j = 0.0
 	mat = np.zeros((60,4))
 
-	print(y_test)
-
 	while j < 4.0:
 		y_test2 = np.copy(y_test)
 		y_train2 = np.copy(y_train)
