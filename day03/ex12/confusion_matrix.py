@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix
 
 def confusion_matrix_(y_true, y_hat, labels=None):
 	"""
@@ -15,22 +14,28 @@ def confusion_matrix_(y_true, y_hat, labels=None):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	#lookupTable2, indexed_dataSet2 = np.unique(y_hat, return_inverse=True)
-	#lookupTable, indexed_dataSet = np.unique(y_true, return_inverse=True)
-	#print(y_true)
-	#print(indexed_dataSet)
-	#print(y_hat)
-	#print(indexed_dataSet2)
-	#K = len(np.unique(y_hat)) # Number of classes 
-	#result = np.zeros((K, K))
-#
-	#for i in range(len(y_true)):
-	#	result[indexed_dataSet[i]][indexed_dataSet2[i]] += 1
-#
-	#return result
+	if labels is not None:
+		for i in range(len(y_hat)):
+			if y_hat[i] not in labels or y_true[i] not  in labels:
+				y_hat = np.delete(y_hat, i)
+				y_true = np.delete(y_true, i)
+	conc = np.concatenate((y_hat, y_true))
+	_, indexed_dataSet = np.unique(conc, return_inverse=True)
+	K = len(np.unique(indexed_dataSet))
+	splited = np.split(indexed_dataSet, 2)
+	y_hat = splited[0]
+	y_true = splited[1]
+	
+	result = np.zeros((K, K))
+
+	for i in range(len(y_hat)):
+		result[y_true[i]][y_hat[i]] += 1
+	return result
 
 if __name__ == "__main__":
 	y_hat = np.array(['norminet', 'dog', 'norminet', 'norminet', 'dog', 'bird'])
 	y = np.array(['dog', 'dog', 'norminet', 'norminet', 'dog', 'norminet'])
 
+	#confusion_matrix_(y, y_hat)
+	print(confusion_matrix_(y, y_hat, labels=['dog', 'norminet']))
 	print(confusion_matrix_(y, y_hat))
