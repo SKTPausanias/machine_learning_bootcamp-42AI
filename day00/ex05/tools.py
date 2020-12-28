@@ -11,7 +11,7 @@ def add_intercept(x):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	if len(x) < 1 or type(x) is not np.ndarray:
+	if x.size == 0:
 		return None
 	return np.c_[np.ones(x.shape[0]), x]
 

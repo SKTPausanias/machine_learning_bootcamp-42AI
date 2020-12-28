@@ -12,7 +12,7 @@ def simple_predict(x: np.ndarray, theta: np.ndarray):
 	Raises:
 	This function should not raise any Exception.
 	"""
-	if len(x) < 1 or theta.shape != (2,):
+	if x.size == 0 or theta.shape != (2,):
 		return None
 	return theta[0] + (theta[1] * x)
 
